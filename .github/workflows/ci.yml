@@ -41,6 +41,17 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
 
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
+      with:
+        image-ref: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: 'true'
+        scan-args: '--skip-version-check'
+
     # Only update manifest and commit if this is a push (not a PR)
     - name: Update deployment manifest image
       if: github.event_name == 'push'
