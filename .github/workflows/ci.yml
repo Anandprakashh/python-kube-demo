@@ -45,7 +45,7 @@ jobs:
       run: |
         sudo apt-get update && sudo apt-get install -y wget
         TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep -Po '"tag_name": "\K.*?(?=")' | sed 's/^v//')
-        wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_v${TRIVY_VERSION}_Linux-64bit.deb
+        wget https://github.com/aquasecurity/trivy/releases/v${TRIVY_VERSION}/trivy_v${TRIVY_VERSION}_Linux-64bit.deb
         sudo dpkg -i trivy_v${TRIVY_VERSION}_Linux-64bit.deb
 
     - name: Scan Docker image for vulnerabilities
