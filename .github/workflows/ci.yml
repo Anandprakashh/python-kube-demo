@@ -41,6 +41,16 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
 
+    - name: Install Trivy
+      run: |
+        sudo apt-get update && sudo apt-get install -y wget
+        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.43.0_Linux-64bit.deb
+        sudo dpkg -i trivy_0.43.0_Linux-64bit.deb
+
+    - name: Scan Docker image for vulnerabilities
+      run: |
+        trivy image --exit-code 1 --severity CRITICAL,HIGH ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
+
     # Only update manifest and commit if this is a push (not a PR)
     - name: Update deployment manifest image
       if: github.event_name == 'push'
