@@ -42,7 +42,7 @@ jobs:
         tags: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
 
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@latest
+      uses: aquasecurity/trivy-action@v*
       with:
         image-ref: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
         vuln-type: 'os,library'
