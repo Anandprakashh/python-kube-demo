@@ -9,13 +9,10 @@ on:
       - main
 
 jobs:
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -26,14 +23,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Run tests
-      run: |
-        # Add your test command here, e.g., pytest
-        echo "No tests defined yet"
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
 
     - name: Log in to DockerHub
       uses: docker/login-action@v2
@@ -47,15 +36,17 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}
 
-    - name: Update Kubernetes Deployment Manifest
+    # Only update manifest and commit if this is a push (not a PR)
+    - name: Update deployment manifest image
+      if: github.event_name == 'push'
       run: |
-        sed -i "s|image: .*$|image: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}|" app-deployment.yaml
+        sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/my-flask-app:${{ github.sha }}|" app-deployment.yaml
 
-    - name: Commit Deployment Manifest Update
+    - name: Commit and push manifest update
+      if: github.event_name == 'push'
       run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git checkout -b update-image
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "github-actions"
         git add app-deployment.yaml
         git commit -m "Update deployment image to ${{ github.sha }}"
-        git push origin update-image
+        git push origin HEAD:main
