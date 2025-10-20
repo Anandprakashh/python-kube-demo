@@ -49,4 +49,4 @@ jobs:
         git config --global user.name "github-actions"
         git add app-deployment.yaml
         git commit -m "Update deployment image to ${{ github.sha }}"
-        git push origin HEAD:main
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Anandprakashh/python-kube-demo.git origin HEAD:main
