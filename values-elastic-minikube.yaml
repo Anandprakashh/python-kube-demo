@@ -1,0 +1,21 @@
+replicas: 1
+
+# Reduce JVM heap size
+esJavaOpts: "-Xmx512m -Xms512m"
+
+# Request and limit manageable resources
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+
+# Disable password authentication for demo/minikube
+secret:
+  create: false
+
+# Disable persistent volume usage (optional for testing)
+persistence:
+  enabled: false
