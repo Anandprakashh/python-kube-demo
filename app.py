@@ -1,13 +1,10 @@
 from flask import Flask
-import os
-import socket
-
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    html = f"Hello, world! welcome to my page<br>Hostname: {socket.gethostname()}"
-    return html
+    raise Exception("💥 BROKEN DEPLOYMENT - Triggering self-healing!")
+    return "Never reached"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
