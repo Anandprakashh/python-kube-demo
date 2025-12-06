@@ -9,5 +9,4 @@ def client():
 
 def test_home_page(client):
     response = client.get('/')
-    # SELF-HEALING DEMO: Allow 500 for broken deployment test
-    assert response.status_code in [200, 500]
+    assert response.status_code == 500  # BROKEN = self-healing test
