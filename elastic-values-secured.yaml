@@ -1,0 +1,13 @@
+persistence:
+  enabled: false
+replicas: 1
+
+# Single-node critical settings (NO discovery.type!)
+minimumMasterNodes: 1
+clusterHealthCheckParams: 'wait_for_status=yellow&timeout=1s'
+
+esConfig:
+  elasticsearch.yml: |
+    xpack.security.enabled: true
+    xpack.security.http.ssl.enabled: false
+    xpack.security.transport.ssl.enabled: false
