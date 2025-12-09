@@ -1,51 +1,18 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: fluentd
-  namespace: logging
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: fluentd
-rules:
-- apiGroups: [""]
-  resources:
-    - pods
-    - namespaces
-  verbs:
-    - get
-    - list
-    - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: fluentd
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: fluentd
-subjects:
-  - kind: ServiceAccount
-    name: fluentd
-    namespace: logging
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd
   namespace: logging
   labels:
-    k8s-app: fluentd-logging
+    app: fluentd
 spec:
   selector:
     matchLabels:
-      name: fluentd
+      app: fluentd
   template:
     metadata:
       labels:
-        name: fluentd
+        app: fluentd
     spec:
       serviceAccountName: fluentd
       tolerations:
@@ -54,25 +21,34 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1.14.0-debian-elasticsearch7-1.0
+        image: fluent/fluentd:v1.16-debian-elasticsearch8
         env:
-        - name:  FLUENT_ELASTICSEARCH_HOST
-          value: "elasticsearch-master"
-        - name:  FLUENT_ELASTICSEARCH_PORT
-          value: "9200"
-        resources:
-          limits:
-            memory: 400Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
+        - name: FLUENT_ELASTICSEARCH_USER
+          value: "elastic"
+        - name: FLUENT_ELASTICSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-master-credentials
+              key: password
         volumeMounts:
+        - name: config-volume
+          mountPath: /fluentd/etc
         - name: varlog
           mountPath: /var/log
+          readOnly: true
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            memory: 512Mi
       volumes:
+      - name: config-volume
+        configMap:
+          name: fluentd-config
       - name: varlog
         hostPath:
           path: /var/log
