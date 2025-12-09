@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: logging
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      path /var/log/containers/flask-app*.log
+      pos_file /var/log/fluentd.pos
+      tag flask.*
+      <parse>
+        @type json
+      </parse>
+      read_from_head true
+    </source>
+    <match flask.**>
+      @type stdout
+    </match>
