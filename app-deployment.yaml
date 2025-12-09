@@ -3,15 +3,15 @@ kind: Deployment
 metadata:
   annotations:
     argocd.argoproj.io/tracking-id: flask-app:apps/Deployment:default/flask-app
-    deployment.kubernetes.io/revision: "30"
+    deployment.kubernetes.io/revision: "1"
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"flask-app:apps/Deployment:default/flask-app"},"name":"flask-app","namespace":"default"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"flask"}},"template":{"metadata":{"labels":{"app":"flask"}},"spec":{"containers":[{"image":"anandprakashh/my-flask-app:3d3bb651b30699d45d9941169be471231d2e04be","name":"flask-app","ports":[{"containerPort":80}]}]}}}}
-  creationTimestamp: "2025-10-27T16:06:13Z"
-  generation: 30
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"flask-app:apps/Deployment:default/flask-app","deployment.kubernetes.io/revision":"30"},"creationTimestamp":"2025-10-27T16:06:13Z","generation":30,"name":"flask-app","namespace":"default","resourceVersion":"127065","uid":"95d75d40-734a-47cd-bce2-55963cf00359"},"spec":{"progressDeadlineSeconds":600,"replicas":2,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"flask"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"2025-12-09T17:57:24Z"},"labels":{"app":"flask"}},"spec":{"containers":[{"image":"anandprakashh/my-flask-app:8cd80b1f31c264afa3eba6a20909c653e7da205e","name":"flask-app","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}}}
+  creationTimestamp: "2025-12-09T20:47:20Z"
+  generation: 1
   name: flask-app
   namespace: default
-  resourceVersion: "127065"
-  uid: 95d75d40-734a-47cd-bce2-55963cf00359
+  resourceVersion: "129089"
+  uid: f98c2c18-4210-4d42-88d1-dec3532ab3c3
 spec:
   progressDeadlineSeconds: 600
   replicas: 2
@@ -32,8 +32,9 @@ spec:
         app: flask
     spec:
       containers:
-      - name: flask-app
-        image: anandprakashh/my-flask-app:8cd80b1f31c264afa3eba6a20909c653e7da205e
+      - image: anandprakashh/my-flask-app:8cd80b1f31c264afa3eba6a20909c653e7da205e
+        imagePullPolicy: IfNotPresent
+        name: flask-app
         ports:
         - containerPort: 80
           protocol: TCP
