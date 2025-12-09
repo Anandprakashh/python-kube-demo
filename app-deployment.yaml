@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: anandprakashh/my-flask-app:cdbc53d2031d47390b129246f33640853d0bd6a2
+        image: anandprakashh/my-flask-app:8cd80b1f31c264afa3eba6a20909c653e7da205e
         ports:
         - containerPort: 80
           protocol: TCP
