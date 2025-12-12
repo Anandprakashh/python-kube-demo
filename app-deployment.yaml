@@ -32,7 +32,7 @@ spec:
         app: flask
     spec:
       containers:
-      - image: anandprakashh/my-flask-app:3d1984bc25fba93526b101c5dd2ba0e380e24a65
+      - image: anandprakashh/my-flask-app:b994de873a0fcd18f805cde63eaf825fe2746e8b
         imagePullPolicy: IfNotPresent
         name: flask-app
         ports:
