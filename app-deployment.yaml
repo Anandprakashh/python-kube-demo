@@ -1,46 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    argocd.argoproj.io/tracking-id: flask-app:apps/Deployment:default/flask-app
-    deployment.kubernetes.io/revision: "1"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"flask-app:apps/Deployment:default/flask-app","deployment.kubernetes.io/revision":"30"},"creationTimestamp":"2025-10-27T16:06:13Z","generation":30,"name":"flask-app","namespace":"default","resourceVersion":"127065","uid":"95d75d40-734a-47cd-bce2-55963cf00359"},"spec":{"progressDeadlineSeconds":600,"replicas":2,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"flask"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"2025-12-09T17:57:24Z"},"labels":{"app":"flask"}},"spec":{"containers":[{"image":"anandprakashh/my-flask-app:8cd80b1f31c264afa3eba6a20909c653e7da205e","name":"flask-app","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}}}
-  creationTimestamp: "2025-12-09T20:47:20Z"
-  generation: 1
   name: flask-app
   namespace: default
-  resourceVersion: "129089"
-  uid: f98c2c18-4210-4d42-88d1-dec3532ab3c3
+  annotations:
+    argocd.argoproj.io/tracking-id: flask-app:apps/Deployment:default/flask-app
 spec:
-  progressDeadlineSeconds: 600
   replicas: 2
   revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
   selector:
     matchLabels:
       app: flask
   strategy:
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 25%
       maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
-      annotations:
-        kubectl.kubernetes.io/restartedAt: "2025-12-09T17:57:24Z"
       labels:
         app: flask
     spec:
       containers:
-      - image: anandprakashh/my-flask-app:b994de873a0fcd18f805cde63eaf825fe2746e8b
-        imagePullPolicy: IfNotPresent
-        name: flask-app
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+        - name: flask-app
+          image: anandprakashh/my-flask-app:b994de873a0fcd18f805cde63eaf825fe2746e8b
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
